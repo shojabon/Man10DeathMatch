@@ -4,6 +4,8 @@ import com.shojabon.man10deathmatch.Man10DeathMatch
 import com.shojabon.man10deathmatch.data_class.DeathMatchGame
 import com.shojabon.man10deathmatch.data_class.DeathMatchGameStateData
 import com.shojabon.man10deathmatch.enums.DeathMatchState
+import com.shojabon.man10deathmatch.states.in_game.logic.InGameGeneralLogic
+import com.shojabon.man10deathmatch.states.in_game.logic.InGameKillStreakLogic
 import com.shojabon.mcutils.Utils.SScoreboard
 import org.bukkit.Bukkit
 import org.bukkit.boss.BarColor
@@ -18,6 +20,14 @@ class InGameState : DeathMatchGameStateData() {
     override fun start() {
         timerTillNextState.start()
         moveAllPlayersToSpawnPoint()
+    }
+
+    private val generalLogic = InGameGeneralLogic(this)
+    private val killSteakLogic = InGameKillStreakLogic(this)
+
+    override fun defineLogics() {
+        registerLogic(generalLogic)
+        registerLogic(killSteakLogic)
     }
 
     override fun end() {}

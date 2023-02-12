@@ -4,6 +4,7 @@ import com.shojabon.man10deathmatch.commands.Commands
 import com.shojabon.man10deathmatch.data_class.DeathMatchGame
 import com.shojabon.man10deathmatch.data_class.DeathMatchPlayer
 import com.shojabon.man10deathmatch.enums.DeathMatchState
+import org.bukkit.Bukkit
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -36,6 +37,10 @@ class Man10DeathMatch : JavaPlugin(), Listener {
         val normalCommands = Commands(this)
         getCommand("mdm")!!.setExecutor(normalCommands)
         getCommand("mdm")!!.tabCompleter = normalCommands
+
+        Bukkit.getServer().onlinePlayers.forEach{
+            registeredPlayers[it.uniqueId] = DeathMatchPlayer(it)
+        }
 
     }
 

@@ -7,6 +7,7 @@ import com.shojabon.man10deathmatch.states.in_game.InGameState
 import com.shojabon.mcutils.Utils.SConfigFile
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
 import java.io.File
 import java.util.*
@@ -18,6 +19,7 @@ class DeathMatchGame(val plugin: Man10DeathMatch) {
     private var gameCounter = 0
 
     public var currentMapConfig: FileConfiguration? = null
+    var notifyRemainingTimeMap: MutableList<Int> = mutableListOf()
 
     //マップ選択
     fun selectMap(): FileConfiguration?{
@@ -26,6 +28,13 @@ class DeathMatchGame(val plugin: Man10DeathMatch) {
         val selectedMap = maps[gameCounter%maps.size] ?: return null
         gameCounter += 1
         return SConfigFile.getConfigFile(selectedMap.path)
+    }
+
+    fun loadMap(){
+        notifyRemainingTimeMap.clear()
+        // 残り時間通知リスト
+        notifyRemainingTimeMap = currentMapConfig?.getIntegerList("remainingTimeNotification")!!
+
     }
 
     //ステート管理
@@ -56,6 +65,10 @@ class DeathMatchGame(val plugin: Man10DeathMatch) {
             null -> null
 
         }
+    }
+
+    fun getPlayer(uuid: UUID): DeathMatchPlayer?{
+        return Man10DeathMatch.registeredPlayers[uuid]
     }
 
     fun executeCommand(commandName: String){

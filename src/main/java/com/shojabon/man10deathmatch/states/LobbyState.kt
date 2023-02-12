@@ -35,6 +35,7 @@ class LobbyState : DeathMatchGameStateData() {
                 game?.setGameState(DeathMatchState.LOBBY)
                 return@addOnEndEvent
             }
+            game!!.loadMap()
             game?.setGameState(DeathMatchState.IN_GAME)
         }
     }
