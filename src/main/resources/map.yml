@@ -1,0 +1,26 @@
+name: "テストマップ"
+
+spawnLocations: null
+
+equipments:
+
+commands:
+  onDeath:
+  onKill:
+  onKillStreak:
+  onStart:
+  onEnd:
+
+remainingTimeNotification:
+  - 180
+  - 60
+  - 30
+  - 10
+  - 3
+  - 2
+  - 1
+
+camera:
+  commands:
+    thirdPersonMode: "mc1 follow {player}"
+    firstPersonMode: "mc1 clone {player}"

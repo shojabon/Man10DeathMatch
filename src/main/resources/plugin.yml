@@ -1,0 +1,6 @@
+name: Man10DeathMatch
+version: '${version}'
+main: com.shojabon.man10deathmatch.Man10DeathMatch
+api-version: 1.17
+commands:
+  mdm:
