@@ -9,12 +9,13 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.entity.Player
 import java.io.File
 import java.util.*
 
 class DeathMatchGame(val plugin: Man10DeathMatch) {
 
-    private var gameStateType = DeathMatchState.NONE
+    public var gameStateType = DeathMatchState.NONE
     public var gameState: DeathMatchGameStateData? = null
     private var gameCounter = 0
 
@@ -85,6 +86,12 @@ class DeathMatchGame(val plugin: Man10DeathMatch) {
 
     fun getAllSpawnPoints(): List<Location>{
         return Man10DeathMatch.currentGame.currentMapConfig?.getList("spawnLocations", ArrayList<Location>()) as List<Location>
+    }
+
+    fun movePlayerToRandomSpawn(p: Player){
+        val spawnLocations = getAllSpawnPoints()
+        spawnLocations.shuffled()
+        p.teleport(spawnLocations[0])
     }
 
 

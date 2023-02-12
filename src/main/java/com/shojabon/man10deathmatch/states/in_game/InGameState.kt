@@ -61,14 +61,8 @@ class InGameState : DeathMatchGameStateData() {
         }
     }
 
-    fun movePlayerToRandomSpawn(p: Player){
-        val spawnLocations = game?.getAllSpawnPoints() ?: return
-        spawnLocations.shuffled()
-        p.teleport(spawnLocations[0])
-    }
-
     @EventHandler
     fun onJoin(e: PlayerJoinEvent){
-        movePlayerToRandomSpawn(e.player)
+        game?.movePlayerToRandomSpawn(e.player)
     }
 }

@@ -52,6 +52,12 @@ class Man10DeathMatch : JavaPlugin(), Listener {
     @EventHandler
     fun onJoin(e: PlayerJoinEvent){
         registeredPlayers[e.player.uniqueId] = DeathMatchPlayer(e.player)
+        if(currentGame.gameStateType == DeathMatchState.LOBBY){
+            e.player.teleport(config.getLocation("lobbyLocation")!!)
+        }
+        if(currentGame.gameStateType == DeathMatchState.IN_GAME){
+            currentGame.movePlayerToRandomSpawn(e.player)
+        }
     }
 
     @EventHandler

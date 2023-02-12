@@ -55,7 +55,12 @@ class InGameGeneralLogic(val state: InGameState) : Listener {
         e.isCancelled = true
         e.player.foodLevel = 20
         e.player.health = 20.0
-        state.movePlayerToRandomSpawn(e.player)
+        game.movePlayerToRandomSpawn(e.player)
+        val equipmentCommands: MutableList<String> = game.currentMapConfig?.getStringList("equipments") ?: return
+        equipmentCommands.shuffle()
+        if(equipmentCommands.size == 0) return
+        val commandToExecute = equipmentCommands[0] ?: return
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, commandToExecute.replace("{player}", e.player.name))
     }
 
     @EventHandler
@@ -82,10 +87,24 @@ class InGameGeneralLogic(val state: InGameState) : Listener {
 
     @EventHandler
     fun onDeathMessage(e: Man10DeathMatchPlayerKillEvent){
-        val p = e.killer.getPlayer() ?: return
-        p.sendActionBar(Component.text("§b" + e.killed + "にキルされた"))
+        val p = e.killed.getPlayer() ?: return
+        p.sendActionBar(Component.text("§b" + e.killed.playerName + "にキルされた"))
         p.foodLevel = 20
         p.health = 20.0
+    }
+
+    @EventHandler
+    fun onKillRunCommand(e: Man10DeathMatchPlayerKillEvent){
+        val killer = e.killer.getPlayer() ?: return
+        val killed = e.killed.getPlayer() ?: return
+
+        game.currentMapConfig?.getStringList("commands.onDeath")?.forEach{
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, it.replace("{player}", killed.name))
+        }
+
+        game.currentMapConfig?.getStringList("commands.onKill")?.forEach{
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, it.replace("{player}", killer.name))
+        }
     }
 
 }
