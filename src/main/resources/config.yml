@@ -1,1 +1,3 @@
 lobbyLocation:
+excludedPlayers:
+  - man10server

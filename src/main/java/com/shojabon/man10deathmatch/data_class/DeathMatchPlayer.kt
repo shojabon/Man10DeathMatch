@@ -15,7 +15,7 @@ class DeathMatchPlayer(private val p: Player) {
 
     fun executeEquipment(){
         if(Man10DeathMatch.currentGame == null) return
-        val config = Man10DeathMatch.currentGame?.currentMapConfig ?: return
+        val config = Man10DeathMatch.currentGame.currentMapConfig ?: return
         val equipmentCommands = config.getStringList("equipments")
         if(equipmentCommands.size == 0) return
         equipmentCommands.shuffle()
@@ -34,6 +34,14 @@ class DeathMatchPlayer(private val p: Player) {
             Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, killStreaks.getString(commandForKillStreak)
                     ?.replace("{player}", playerName) ?: "")
         }
+    }
+
+    fun giveRandomEquipment(){
+        val equipmentCommands: MutableList<String> = Man10DeathMatch.currentGame.currentMapConfig?.getStringList("equipments") ?: return
+        equipmentCommands.shuffle()
+        if(equipmentCommands.size == 0) return
+        val commandToExecute = equipmentCommands[0] ?: return
+        Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, commandToExecute.replace("{player}", playerName))
     }
 
 }

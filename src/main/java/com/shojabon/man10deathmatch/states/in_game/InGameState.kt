@@ -6,6 +6,7 @@ import com.shojabon.man10deathmatch.data_class.DeathMatchGameStateData
 import com.shojabon.man10deathmatch.enums.DeathMatchState
 import com.shojabon.man10deathmatch.states.in_game.logic.InGameGeneralLogic
 import com.shojabon.man10deathmatch.states.in_game.logic.InGameKillStreakLogic
+import com.shojabon.man10deathmatch.states.in_game.logic.InGameViewLogic
 import com.shojabon.mcutils.Utils.SScoreboard
 import org.bukkit.Bukkit
 import org.bukkit.boss.BarColor
@@ -24,10 +25,12 @@ class InGameState : DeathMatchGameStateData() {
 
     private val generalLogic = InGameGeneralLogic(this)
     private val killSteakLogic = InGameKillStreakLogic(this)
+    private val viewLogic = InGameViewLogic(this)
 
     override fun defineLogics() {
         registerLogic(generalLogic)
         registerLogic(killSteakLogic)
+        registerLogic(viewLogic)
     }
 
     override fun end() {}
@@ -58,6 +61,7 @@ class InGameState : DeathMatchGameStateData() {
         val spawnLocations = game?.getAllSpawnPoints()
         Bukkit.getServer().onlinePlayers.forEachIndexed{ index, player ->
             player.teleport(spawnLocations!![index%spawnLocations.size])
+            game?.getPlayer(player.uniqueId)?.giveRandomEquipment()
         }
     }
 

@@ -6,12 +6,14 @@ import com.shojabon.man10deathmatch.data_class.DeathMatchPlayer
 import com.shojabon.man10deathmatch.events.Man10DeathMatchPlayerKillEvent
 import com.shojabon.man10deathmatch.states.in_game.InGameState
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
+import java.time.Duration
 import java.util.*
 
 class InGameGeneralLogic(val state: InGameState) : Listener {
@@ -52,15 +54,12 @@ class InGameGeneralLogic(val state: InGameState) : Listener {
 
     @EventHandler
     fun respawn(e: PlayerDeathEvent){
+        val player = game.getPlayer(e.entity.uniqueId) ?: return
         e.isCancelled = true
         e.player.foodLevel = 20
         e.player.health = 20.0
         game.movePlayerToRandomSpawn(e.player)
-        val equipmentCommands: MutableList<String> = game.currentMapConfig?.getStringList("equipments") ?: return
-        equipmentCommands.shuffle()
-        if(equipmentCommands.size == 0) return
-        val commandToExecute = equipmentCommands[0] ?: return
-        Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, commandToExecute.replace("{player}", e.player.name))
+        player.giveRandomEquipment()
     }
 
     @EventHandler
@@ -80,7 +79,7 @@ class InGameGeneralLogic(val state: InGameState) : Listener {
     @EventHandler
     fun onKillHeal(e: Man10DeathMatchPlayerKillEvent){
         val p = e.killer.getPlayer() ?: return
-        p.sendActionBar(Component.text("§c" + e.killed.playerName + "をキル"))
+        p.showTitle(Title.title(Component.text("§a" + e.killed.playerName + "をキル"), Component.text(""), Title.Times.of(Duration.ZERO, Duration.ofMillis(500), Duration.ZERO)))
         p.foodLevel = 20
         p.health = 20.0
     }
@@ -88,7 +87,7 @@ class InGameGeneralLogic(val state: InGameState) : Listener {
     @EventHandler
     fun onDeathMessage(e: Man10DeathMatchPlayerKillEvent){
         val p = e.killed.getPlayer() ?: return
-        p.sendActionBar(Component.text("§b" + e.killed.playerName + "にキルされた"))
+        p.showTitle(Title.title(Component.text("§c" + e.killer.playerName + "にキルされた"), Component.text(""), Title.Times.of(Duration.ZERO, Duration.ofMillis(500), Duration.ZERO)))
         p.foodLevel = 20
         p.health = 20.0
     }
@@ -99,11 +98,19 @@ class InGameGeneralLogic(val state: InGameState) : Listener {
         val killed = e.killed.getPlayer() ?: return
 
         game.currentMapConfig?.getStringList("commands.onDeath")?.forEach{
-            Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, it.replace("{player}", killed.name))
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender,
+                    it
+                            .replace("{killer}", killer.name)
+                            .replace("{killed}", killed.name)
+            )
         }
 
         game.currentMapConfig?.getStringList("commands.onKill")?.forEach{
-            Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, it.replace("{player}", killer.name))
+            Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender,
+                    it
+                            .replace("{killer}", killer.name)
+                            .replace("{killed}", killed.name)
+            )
         }
     }
 

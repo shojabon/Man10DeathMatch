@@ -37,21 +37,21 @@ open class DeathMatchGameStateData : Listener {
         defineBossBar()
         defineScoreboard()
         defineLogics()
-        Bukkit.getServer().getPluginManager().registerEvents(this, plugin)
+        Bukkit.getServer().pluginManager.registerEvents(this, plugin)
         for (listener in logics) {
-            Bukkit.getServer().getPluginManager().registerEvents(listener, plugin)
+            Bukkit.getServer().pluginManager.registerEvents(listener, plugin)
         }
 
         //register boss bar
         if (bar != null) {
-            for (p in Bukkit.getServer().getOnlinePlayers()) {
+            for (p in Bukkit.getServer().onlinePlayers) {
                 bar!!.addPlayer(p)
             }
         }
 
         //register scoreboard
         if (scoreboard != null) {
-            for (p in Bukkit.getServer().getOnlinePlayers()) {
+            for (p in Bukkit.getServer().onlinePlayers) {
                 scoreboard!!.addPlayer(p)
             }
         }

@@ -90,8 +90,7 @@ class DeathMatchGame(val plugin: Man10DeathMatch) {
 
     fun movePlayerToRandomSpawn(p: Player){
         val spawnLocations = getAllSpawnPoints()
-        spawnLocations.shuffled()
-        p.teleport(spawnLocations[0])
+        p.teleport(spawnLocations.shuffled()[0])
     }
 
 
