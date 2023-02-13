@@ -21,6 +21,7 @@ class DeathMatchGame(val plugin: Man10DeathMatch) {
 
     public var currentMapConfig: FileConfiguration? = null
     var notifyRemainingTimeMap: MutableList<Int> = mutableListOf()
+    public var gameId: UUID? = null
 
     //マップ選択
     fun selectMap(): FileConfiguration?{

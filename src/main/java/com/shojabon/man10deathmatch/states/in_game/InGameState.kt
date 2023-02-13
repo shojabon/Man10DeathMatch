@@ -6,6 +6,7 @@ import com.shojabon.man10deathmatch.data_class.DeathMatchGameStateData
 import com.shojabon.man10deathmatch.enums.DeathMatchState
 import com.shojabon.man10deathmatch.states.in_game.logic.InGameGeneralLogic
 import com.shojabon.man10deathmatch.states.in_game.logic.InGameKillStreakLogic
+import com.shojabon.man10deathmatch.states.in_game.logic.InGameLoggingLogic
 import com.shojabon.man10deathmatch.states.in_game.logic.InGameViewLogic
 import com.shojabon.mcutils.Utils.SScoreboard
 import org.bukkit.Bukkit
@@ -23,14 +24,16 @@ class InGameState : DeathMatchGameStateData() {
         moveAllPlayersToSpawnPoint()
     }
 
-    private val generalLogic = InGameGeneralLogic(this)
-    private val killSteakLogic = InGameKillStreakLogic(this)
-    private val viewLogic = InGameViewLogic(this)
+    public val generalLogic = InGameGeneralLogic(this)
+    public val killSteakLogic = InGameKillStreakLogic(this)
+    public val viewLogic = InGameViewLogic(this)
+    public val loggingLogic = InGameLoggingLogic(this)
 
     override fun defineLogics() {
         registerLogic(generalLogic)
         registerLogic(killSteakLogic)
         registerLogic(viewLogic)
+        registerLogic(loggingLogic)
     }
 
     override fun end() {}

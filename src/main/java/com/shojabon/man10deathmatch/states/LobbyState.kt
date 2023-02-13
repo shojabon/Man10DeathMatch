@@ -10,6 +10,7 @@ import org.bukkit.Bukkit
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
 import java.awt.TextComponent
+import java.util.*
 
 class LobbyState : DeathMatchGameStateData() {
     var game: DeathMatchGame? = Man10DeathMatch.currentGame
@@ -36,6 +37,7 @@ class LobbyState : DeathMatchGameStateData() {
                 return@addOnEndEvent
             }
             game!!.loadMap()
+            game?.gameId = UUID.randomUUID()
             game?.setGameState(DeathMatchState.IN_GAME)
         }
     }

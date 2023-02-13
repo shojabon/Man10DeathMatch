@@ -6,12 +6,16 @@ import com.shojabon.man10deathmatch.states.in_game.InGameState
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import java.util.*
-import kotlin.collections.HashMap
 
 class InGameKillStreakLogic(private val state: InGameState) : Listener {
     var game: DeathMatchGame? = state.game
     private var killStreakMap: HashMap<UUID, Int> = HashMap()
 
+    fun getKillStreak(uuid: UUID?): Int {
+        return if (!killStreakMap.containsKey(uuid)) {
+            1
+        } else killStreakMap[uuid]!!
+    }
     @EventHandler
     fun onKill(e: Man10DeathMatchPlayerKillEvent) {
         if (!killStreakMap.containsKey(e.killer.playerUUID)) {
