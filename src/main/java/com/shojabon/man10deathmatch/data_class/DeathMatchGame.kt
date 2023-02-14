@@ -5,6 +5,7 @@ import com.shojabon.man10deathmatch.enums.DeathMatchState
 import com.shojabon.man10deathmatch.states.LobbyState
 import com.shojabon.man10deathmatch.states.in_game.InGameState
 import com.shojabon.mcutils.Utils.SConfigFile
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.configuration.ConfigurationSection
@@ -92,6 +93,19 @@ class DeathMatchGame(val plugin: Man10DeathMatch) {
     fun movePlayerToRandomSpawn(p: Player){
         val spawnLocations = getAllSpawnPoints()
         p.teleport(spawnLocations.shuffled()[0])
+    }
+
+    fun changeMap(){
+        val selectedMap = selectMap()
+        if(selectedMap != null && canPlayMap(selectedMap)){
+            currentMapConfig = selectedMap
+        }
+        if(currentMapConfig == null){
+            Bukkit.broadcast(Component.text(Man10DeathMatch.prefix + "§c§lマップが選択されなかったのでタイマーをリセットします"))
+            return
+        }
+        loadMap()
+        gameId = UUID.randomUUID()
     }
 
 

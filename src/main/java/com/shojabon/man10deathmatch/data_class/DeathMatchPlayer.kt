@@ -31,8 +31,9 @@ class DeathMatchPlayer(private val p: Player) {
                 ?: return
         for (commandForKillStreak in killStreaks.getKeys(false)) {
             if (!commandForKillStreak.equals(streak.toString(), ignoreCase = true)) continue
-            Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, killStreaks.getString(commandForKillStreak)
-                    ?.replace("{player}", playerName) ?: "")
+            killStreaks.getStringList(commandForKillStreak).forEach{
+                Bukkit.getServer().dispatchCommand(Bukkit.getServer().consoleSender, it.replace("{player}", playerName))
+            }
         }
     }
 

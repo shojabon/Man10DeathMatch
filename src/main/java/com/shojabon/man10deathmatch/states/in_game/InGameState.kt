@@ -20,6 +20,7 @@ class InGameState : DeathMatchGameStateData() {
     var game: DeathMatchGame? = Man10DeathMatch.currentGame
 
     override fun start() {
+        game?.changeMap()
         timerTillNextState.start()
         moveAllPlayersToSpawnPoint()
     }
@@ -39,7 +40,7 @@ class InGameState : DeathMatchGameStateData() {
     override fun end() {}
     override fun defineTimer() {
         timerTillNextState.setRemainingTime(300)
-        timerTillNextState.addOnEndEvent { game?.setGameState(DeathMatchState.LOBBY) }
+        timerTillNextState.addOnEndEvent { game?.setGameState(DeathMatchState.IN_GAME) }
     }
 
     override fun defineBossBar() {

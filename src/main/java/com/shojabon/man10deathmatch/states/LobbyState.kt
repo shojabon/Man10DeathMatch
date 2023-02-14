@@ -26,18 +26,6 @@ class LobbyState : DeathMatchGameStateData() {
     override fun defineTimer() {
         timerTillNextState.setRemainingTime(10)
         timerTillNextState.addOnEndEvent {
-            game?.currentMapConfig = null
-            val selectedMap = game?.selectMap()
-            if(selectedMap != null && game?.canPlayMap(selectedMap) == true){
-                game?.currentMapConfig = selectedMap
-            }
-            if(game?.currentMapConfig == null){
-                Bukkit.broadcast(Component.text(Man10DeathMatch.prefix + "§c§lマップが選択されなかったのでタイマーをリセットします"))
-                game?.setGameState(DeathMatchState.LOBBY)
-                return@addOnEndEvent
-            }
-            game!!.loadMap()
-            game?.gameId = UUID.randomUUID()
             game?.setGameState(DeathMatchState.IN_GAME)
         }
     }
